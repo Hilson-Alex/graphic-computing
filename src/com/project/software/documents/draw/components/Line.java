@@ -5,31 +5,35 @@ import com.project.software.documents.draw.Point;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * An representation for a Line
+ */
 public class Line implements Plotable {
 
+    /**
+     * Stores the two points of the line.
+     */
     private Point[] points = new Point[2];
 
+    /**
+     * Creates a new line for the given points.
+     * @param pointA the initial point of the line.
+     * @param pointB the final point of the line.
+     *
+     * Obs: there's no real initial or final point.
+     * It's just an abstraction, but there's no order.
+     */
     public Line (Point pointA, Point pointB){
         points[0] = pointA;
         points[1] = pointB;
     }
 
-    @Override
-    public List<Point> getPoints() {
-        int deltaX = points[1].X - points[0].X;
-        int deltaY = points[1].Y - points[0].Y;
-        if (Math.abs(deltaY) < Math.abs(deltaX)){
-            if (points[1].isLongerThan(points[0])){
-                return plotLow(points[0], points[1]);
-            }
-            return plotLow(points[1], points[0]);
-        }
-        if (points[1].isHigherThan(points[0])){
-            return plotHigh(points[0], points[1]);
-        }
-        return plotHigh(points[1], points[0]);
-    }
-
+    /**
+     * Generate the points of the line on a Y-relative way.
+     * @param point0 the origin of the line.
+     * @param point1 the endpoint of the line.
+     * @return all the points of the line.
+     */
     private List<Point> plotHigh(Point point0, Point point1) {
         List<Point> pointList = new LinkedList<>();
         int deltaX = point1.X - point0.X;
@@ -52,6 +56,12 @@ public class Line implements Plotable {
         return pointList;
     }
 
+    /**
+     * Generate the points of the line on a X-relative way.
+     * @param point0 the origin of the line.
+     * @param point1 the endpoint of the line.
+     * @return all the points of the line.
+     */
     private List<Point> plotLow(Point point0, Point point1) {
         List<Point> pointList = new LinkedList<>();
         int deltaX = point1.X - point0.X;
@@ -74,79 +84,20 @@ public class Line implements Plotable {
         return pointList;
     }
 
-    /*public List<Point> getPoints(){
-        int initialX, initialY, err, deltaX, deltaY;
-        LinkedList<Point> pointsList = new LinkedList<>();
-        err = 0;
-        initialX = points[0].X;
-        initialY = points[0].Y;
-        deltaX = points[1].X - points[0].X;
-        deltaY = points[1].Y - points[0].Y;
-
-        pointsList.add(points[0]);
-        pointsList.add(points[1]);
-
-        // Verifica se o segundo ponto é mais distante
-        if(deltaX >= 0){
-
-            //Delta X maior intervalo
-            if(Math.abs(deltaX) >= Math.abs(deltaY)){
-                for(int i = 1; i < Math.abs(deltaX); i++){
-                    if( err <= deltaX/(deltaY+1)){
-                        initialX++;
-                        pointsList.add(new Point(initialX,initialY));
-                        err += deltaY;
-                    }else{
-                        initialX++;
-                        initialY++;
-                        pointsList.add(new Point(initialX,initialY));
-                        err += deltaY - deltaX;
-                    }
-                }
-
-            //Delta Y maior intervalo
-            }else{
-                for(int i=1;i<Math.abs(deltaY);i++){
-                    if(err < deltaY/(deltaX+1)){
-                        initialY++;
-                        pointsList.add(new Point(initialX,initialY));
-                        err += deltaX;
-                    }else{
-                        initialX++;
-                        initialY++;
-                        pointsList.add(new Point(initialX,initialY));
-                        err += deltaX - deltaY;
-                    }
-                }
+    @Override
+    public List<Point> getPoints() {
+        int deltaX = points[1].X - points[0].X;
+        int deltaY = points[1].Y - points[0].Y;
+        if (Math.abs(deltaY) < Math.abs(deltaX)){
+            if (points[1].isLongerThan(points[0])){
+                return plotLow(points[0], points[1]);
             }
-        }else if (deltaX == Math.abs(deltaY)){
-            for(int i=1;i<Math.abs(deltaX);i++){
-                if(err<0){
-                    initialX--;
-                    pointsList.add(new Point(initialX,initialY));
-                    err += deltaY;
-                }else{
-                    initialX--;
-                    initialY++;
-                    pointsList.add(new Point(initialX,initialY));
-                    err += deltaY + deltaX;
-                }
-            }
-        }else{
-            for(int i=1;i<Math.abs(deltaY);i++){
-                if(err<0){
-                    initialX--;
-                    initialY++;
-                    pointsList.add(new Point(initialX,initialY));
-                    err += deltaY + deltaX;
-                }else{
-                    initialY++;
-                    pointsList.add(new Point(initialX,initialY));
-                    err += deltaX;
-                }
-            }
+            return plotLow(points[1], points[0]);
         }
-        return pointsList;
-    }*/
+        if (points[1].isHigherThan(points[0])){
+            return plotHigh(points[0], points[1]);
+        }
+        return plotHigh(points[1], points[0]);
+    }
 }
 
