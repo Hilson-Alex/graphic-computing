@@ -1,6 +1,4 @@
-package com.project.software.documents.draw;
-
-import com.project.software.documents.draw.components.Plotable;
+package com.project.software.documents.draw.plain;
 
 /**
  * Creates a graphic with X weight and Y height.
@@ -11,7 +9,7 @@ public class ViewMatrix {
     /**
      * The graphic matrix
      */
-    private final Character[][] screen;
+    private final Integer[][] screen;
 
     /**
      * max weight of the graphic
@@ -29,7 +27,7 @@ public class ViewMatrix {
      * @param ySize the height of the matrix.
      */
     public ViewMatrix (int xSize, int ySize){
-        screen = new Character[ySize][xSize];
+        screen = new Integer[ySize][xSize];
         this.xSize = xSize;
         this.ySize = ySize;
         clean();
@@ -48,7 +46,7 @@ public class ViewMatrix {
     public void print (){
         for (int i = ySize - 1; i >= 0; i--){
             for (int j = 0; j < xSize; j++){
-                System.out.print(screen[i][j] + " ");
+                System.out.print((screen[i][j]==0 ? '.' : '@') + " ");
             }
             System.out.println();
         }
@@ -61,7 +59,7 @@ public class ViewMatrix {
     public void clean (){
         for (int i = 0; i < ySize; i++){
             for (int j = 0; j < xSize; j++){
-                 screen[i][j] = '.';
+                 screen[i][j] = 0;
             }
         }
     }
@@ -72,7 +70,7 @@ public class ViewMatrix {
      */
     public void plot (Point point){
         if (point.Y < ySize && point.X < xSize) {
-            screen[point.Y][point.X] = '@';
+            screen[point.Y][point.X] = 1;
         }
     }
 
@@ -82,6 +80,11 @@ public class ViewMatrix {
      */
     public void plot (Plotable element){
         element.getPoints().forEach(this::plot);
+    }
+
+    private boolean isBetweenEdge (Point point){
+        return point.Y < ySize && point.Y >= 0 &&
+               point.X < xSize && point.X >=0;
     }
 
 }

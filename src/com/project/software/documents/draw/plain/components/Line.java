@@ -1,14 +1,17 @@
-package com.project.software.documents.draw.components;
+package com.project.software.documents.draw.plain.components;
 
-import com.project.software.documents.draw.Point;
+import com.project.software.documents.draw.plain.Point;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * An representation for a Line
  */
-public class Line implements Plotable {
+public class Line implements Scalable {
 
     /**
      * Stores the two points of the line.
@@ -16,17 +19,19 @@ public class Line implements Plotable {
     private Point[] points = new Point[2];
 
     /**
-     * Creates a new line for the given points.
-     * @param pointA the initial point of the line.
-     * @param pointB the final point of the line.
+     * Creates a new line segment for the given points.
+     * @param origin the initial point of the line.
+     * @param endPoint the final point of the line.
      *
-     * Obs: there's no real initial or final point.
-     * It's just an abstraction, but there's no order.
+     * Obs: The origin will be the point used to rotate
+     * The line.
      */
-    public Line (Point pointA, Point pointB){
-        points[0] = pointA;
-        points[1] = pointB;
+    public Line (Point origin, Point endPoint){
+        points[0] = origin;
+        points[1] = endPoint;
     }
+
+    // private methods
 
     /**
      * Generate the points of the line on a Y-relative way.
@@ -62,7 +67,7 @@ public class Line implements Plotable {
      * @param point1 the endpoint of the line.
      * @return all the points of the line.
      */
-    private List<Point> plotLow(Point point0, Point point1) {
+    private List<Point> plotLong(Point point0, Point point1) {
         List<Point> pointList = new LinkedList<>();
         int deltaX = point1.X - point0.X;
         int deltaY = point1.Y - point0.Y;
@@ -84,20 +89,49 @@ public class Line implements Plotable {
         return pointList;
     }
 
+    // methods from Plotable
+
     @Override
-    public List<Point> getPoints() {
+    public Collection<Point> getPoints() {
         int deltaX = points[1].X - points[0].X;
         int deltaY = points[1].Y - points[0].Y;
         if (Math.abs(deltaY) < Math.abs(deltaX)){
             if (points[1].isLongerThan(points[0])){
-                return plotLow(points[0], points[1]);
+                return plotLong(points[0], points[1]);
             }
-            return plotLow(points[1], points[0]);
+            return plotLong(points[1], points[0]);
         }
         if (points[1].isHigherThan(points[0])){
             return plotHigh(points[0], points[1]);
         }
         return plotHigh(points[1], points[0]);
+    }
+
+    /**
+     * Changes the line and then return this same line
+     * (useful for fluent interface).
+     * @param xAmount the amount added to X coordinates
+     *                (negative numbers are accepted).
+     * @param yAmount the amount added to Y coordinates
+     *                (negative numbers are accepted).
+     * @return this line (after the change)
+     */
+    @Override
+    public Line translate(int xAmount, int yAmount) {
+        Arrays.stream(points)
+                .map(point ->  point = point.translate(xAmount, yAmount))
+                .collect(Collectors.toList()).toArray(points);
+        return this;
+    }
+
+    // methods from Scalable
+
+    @Override
+    public Line resize(float xScale, float yScale) {
+        Arrays.stream(points)
+                .map(point ->  point = new Point(Math.round(point.X * xScale), Math.round(point.Y * yScale)))
+                .collect(Collectors.toList()).toArray(points);
+        return this;
     }
 }
 
