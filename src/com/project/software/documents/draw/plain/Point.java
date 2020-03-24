@@ -1,9 +1,17 @@
-package com.project.software.documents.draw;
+package com.project.software.documents.draw.plain;
+
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Represents a coordinate.
+ *
+ * @implNote X and Y of Point are final. This
+ * means that {@link Plotable} methods like
+ * translate will return a new Point, and not
+ * change the actual point.
  */
-public class Point {
+public class Point implements Plotable {
 
     /**
      * X coordinate.
@@ -63,6 +71,25 @@ public class Point {
      */
     public boolean isLongerOrEqual(Point point){
         return isLongerThan(point) || this.X == point.X;
+    }
+
+    @Override
+    public Collection<Point> getPoints() {
+        return List.of(this);
+    }
+
+    /**
+     * Note that point has final attributes, so to store
+     * the translated point you have to assign it.
+     * @param xAmount the amount added to X coordinates
+     *                (negative numbers are accepted).
+     * @param yAmount the amount added to Y coordinates
+     *                (negative numbers are accepted).
+     * @return A new point object.
+     */
+    @Override
+    public Point translate(int xAmount, int yAmount) {
+        return new Point(this.X + xAmount, this.Y + yAmount);
     }
 
     @Override
