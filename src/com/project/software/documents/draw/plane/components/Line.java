@@ -1,6 +1,7 @@
-package com.project.software.documents.draw.plain.components;
+package com.project.software.documents.draw.plane.components;
 
-import com.project.software.documents.draw.plain.Point;
+import com.project.software.documents.draw.plane.Plotable;
+import com.project.software.documents.draw.plane.Point;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -11,7 +12,7 @@ import java.util.stream.Collectors;
 /**
  * An representation for a Line
  */
-public class Line implements Scalable {
+public class Line implements Scalable, Rotatable {
 
     /**
      * Stores the two points of the line.
@@ -20,15 +21,13 @@ public class Line implements Scalable {
 
     /**
      * Creates a new line segment for the given points.
-     * @param origin the initial point of the line.
-     * @param endPoint the final point of the line.
-     *
-     * Obs: The origin will be the point used to rotate
-     * The line.
+     * @param origin the initial point of the line and
+     *               the one used to rotate the line.
+     * @param pointB the final point of the line.
      */
-    public Line (Point origin, Point endPoint){
+    public Line (Point origin, Point pointB){
         points[0] = origin;
-        points[1] = endPoint;
+        points[1] = pointB;
     }
 
     // private methods
@@ -96,7 +95,7 @@ public class Line implements Scalable {
         int deltaX = points[1].X - points[0].X;
         int deltaY = points[1].Y - points[0].Y;
         if (Math.abs(deltaY) < Math.abs(deltaX)){
-            if (points[1].isLongerThan(points[0])){
+            if (points[1].isLongerThan(points[0])) {
                 return plotLong(points[0], points[1]);
             }
             return plotLong(points[1], points[0]);
@@ -127,11 +126,28 @@ public class Line implements Scalable {
     // methods from Scalable
 
     @Override
-    public Line resize(float xScale, float yScale) {
+    public Line resize(double xScale, double yScale) {
         Arrays.stream(points)
-                .map(point ->  point = new Point(Math.round(point.X * xScale), Math.round(point.Y * yScale)))
+                .map(point ->  point = new Point((int) Math.round(point.X * xScale), (int) Math.round(point.Y * yScale)))
                 .collect(Collectors.toList()).toArray(points);
         return this;
     }
+
+    // methods from Rotatable
+
+    /**
+     * Rotates the line using the first passed point
+     * as reference.
+     * @param degrees The degrees of the angle.
+     * @return this line after the rotation.
+     */
+    @Override
+    public Plotable rotate(double degrees) {
+        Point point = points[1].translate(-points[0].X, -points[0].Y);
+        point = Point.rotateByOrigin(point, degrees);
+        points[1] = point.translate(points[0].X, points[0].Y);
+        return this;
+    }
+
 }
 

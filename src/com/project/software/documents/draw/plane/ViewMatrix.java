@@ -1,4 +1,4 @@
-package com.project.software.documents.draw.plain;
+package com.project.software.documents.draw.plane;
 
 /**
  * Creates a graphic with X weight and Y height.
@@ -69,7 +69,7 @@ public class ViewMatrix {
      * @param point A {@link Point} to be plotted;
      */
     public void plot (Point point){
-        if (point.Y < ySize && point.X < xSize) {
+        if (isBetweenEdge(point)) {
             screen[point.Y][point.X] = 1;
         }
     }
@@ -82,6 +82,12 @@ public class ViewMatrix {
         element.getPoints().forEach(this::plot);
     }
 
+    /**
+     * Verifies if a point is between the edges of the Matrix.
+     * @param point The point to be verified.
+     * @return True if the point is between the edges of the
+     *          matrix.
+     */
     private boolean isBetweenEdge (Point point){
         return point.Y < ySize && point.Y >= 0 &&
                point.X < xSize && point.X >=0;

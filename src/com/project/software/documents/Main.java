@@ -1,21 +1,20 @@
 package com.project.software.documents;
 
-import com.project.software.documents.draw.plain.Point;
-import com.project.software.documents.draw.plain.ViewMatrix;
-import com.project.software.documents.draw.plain.components.geometry.Triangle;
+import com.project.software.documents.draw.plane.Point;
+import com.project.software.documents.draw.plane.ViewMatrix;
 
 public class Main {
 
     public static void main(String[] args) {
         ViewMatrix vm = new ViewMatrix(90, 40);
-        Point pointA = new Point(9, 2);
-        Point pointB = new Point(81, 2);
-        Point pointC = new Point(81, 38);
-        Triangle triangle = new Triangle(pointA, pointB, pointC);
-        vm.plot(triangle);
+        Point pointA = new Point(35, 15);
+//        Point pointB = new Point(55, 15);
+//        Point pointC = new Point(55, 25);
+//        Triangle triangle = new Triangle(pointA, pointB, pointC);
+        for (int i = 0; i < 360; i ++){
+            vm.plot(Point.rotateByOrigin(pointA, i));
+        }
         vm.print();
-        vm.clean();
-        vm.plot(triangle.resize(0.5f));
-        vm.print();
+
     }
 }
