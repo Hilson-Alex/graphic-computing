@@ -1,10 +1,13 @@
 package com.project.software.documents.draw.plane;
 
+import java.util.Collection;
+import java.util.LinkedList;
+
 /**
  * Creates a graphic with X weight and Y height.
  * The (0,0) coordinate is in the bottom-left side.
  */
-public class ViewMatrix {
+public class ViewMatrix implements Plotable {
 
     /**
      * The graphic matrix
@@ -20,6 +23,12 @@ public class ViewMatrix {
      * max height of the graphic
      */
     private final int ySize;
+
+    /**
+     * Define the screen position by an imaginary
+     * cartesian plane.
+     */
+    private Point index = new Point(0,0);
 
     /**
      * Create a graphic matrix.
@@ -70,7 +79,7 @@ public class ViewMatrix {
      */
     public void plot (Point point){
         if (isBetweenEdge(point)) {
-            screen[point.Y][point.X] = 1;
+            screen[point.Y - index.Y][point.X - index.X] = 1;
         }
     }
 
@@ -89,8 +98,27 @@ public class ViewMatrix {
      *          matrix.
      */
     private boolean isBetweenEdge (Point point){
+        point = point.translate(-index.X, -index.Y);
         return point.Y < ySize && point.Y >= 0 &&
                point.X < xSize && point.X >=0;
     }
 
+    @Override
+    public Collection<Point> getPoints() {
+        LinkedList<Point> points = new LinkedList<>();
+        for (int i = 0; i < ySize; i++){
+            for (int j = 0; j < xSize; j++){
+                if (screen[i][j] == 1){
+                    points.add(new Point(j + index.X, i + index.Y));
+                }
+            }
+        }
+        return points;
+    }
+
+    @Override
+    public Plotable translate(int xAmount, int yAmount) {
+        this.index = new Point(xAmount, yAmount);
+        return this;
+    }
 }
