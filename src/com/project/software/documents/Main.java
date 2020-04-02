@@ -2,11 +2,17 @@ package com.project.software.documents;
 
 import com.project.software.documents.draw.solid.Euler;
 import com.project.software.documents.draw.solid.Point3D;
+import com.project.software.documents.draw.solid.View3D;
 
 public class Main {
 
     public static void main(String[] args) {
         //euler();
+        View3D m = new View3D(20, 20, 12);
+        m.plot(new Point3D(7 , 10, 2));
+        m.plot(new Point3D(10, 2, 7));
+        m.plot(new Point3D(2, 7, 10));
+        m.print();
     }
 
     private static void euler (){
