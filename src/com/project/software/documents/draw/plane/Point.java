@@ -1,4 +1,4 @@
-package com.project.software.documents.draw.plain;
+package com.project.software.documents.draw.plane;
 
 import java.util.Collection;
 import java.util.List;
@@ -71,6 +71,22 @@ public class Point implements Plotable {
      */
     public boolean isLongerOrEqual(Point point){
         return isLongerThan(point) || this.X == point.X;
+    }
+
+    /**
+     * Rotate a point by the (0, 0) coordinate. Note that point does not implements
+     * the {@link com.project.software.documents.draw.plane.components.Rotatable}
+     * interface cause the point doesn't rotates by itself, but by the origin.
+     * this method is not like Rotatable.rotate.
+     * @param point the reference point that the position will be changed.
+     * @param degrees the degrees of the position change
+     * @return a new point with an position rotated by the origin from the point.
+     */
+    public static Point rotateByOrigin(Point point, double degrees){
+        double radians = Math.toRadians(degrees);
+        double x = point.X * Math.cos(radians) - point.Y * Math.sin(radians);
+        double y = point.Y * Math.cos(radians) + point.X * Math.sin(radians);
+        return new Point((int) Math.round(x), (int) Math.round(y));
     }
 
     @Override

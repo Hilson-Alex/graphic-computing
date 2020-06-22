@@ -1,4 +1,4 @@
-package com.project.software.documents.draw.plain;
+package com.project.software.documents.draw.plane;
 
 import java.util.Collection;
 
