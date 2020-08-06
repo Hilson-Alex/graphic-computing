@@ -52,43 +52,47 @@ public class ViewMatrix implements Plotable {
     /**
      * prints the matrix on terminal.
      */
-    public void print (){
+    public ViewMatrix print (){
         for (int i = ySize - 1; i >= 0; i--){
             for (int j = 0; j < xSize; j++){
-                System.out.print((screen[i][j]==0 ? '.' : '@') + " ");
+                System.out.print((screen[i][j]==0 ? '.' : '@') + "  ");
             }
             System.out.println();
         }
+        return this;
     }
 
     /**
      * cleans the matrix. ('.' is used as an empty
      * coordinate and '@' is used as a point).
      */
-    public void clean (){
+    public ViewMatrix clean (){
         for (int i = 0; i < ySize; i++){
             for (int j = 0; j < xSize; j++){
                  screen[i][j] = 0;
             }
         }
+        return this;
     }
 
     /**
      * plot a point.
      * @param point A {@link Point} to be plotted;
      */
-    public void plot (Point point){
+    public ViewMatrix plot (Point point){
         if (isBetweenEdge(point)) {
             screen[point.Y - index.Y][point.X - index.X] = 1;
         }
+        return this;
     }
 
     /**
      * Plot an element.
      * @param element A {@link Plotable} element.
      */
-    public void plot (Plotable element){
+    public ViewMatrix plot (Plotable element){
         element.getPoints().forEach(this::plot);
+        return this;
     }
 
     /**

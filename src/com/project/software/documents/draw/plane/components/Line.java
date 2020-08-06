@@ -2,6 +2,7 @@ package com.project.software.documents.draw.plane.components;
 
 import com.project.software.documents.draw.plane.Plotable;
 import com.project.software.documents.draw.plane.Point;
+import com.project.software.documents.draw.plane.components.geometry.Triangle;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -30,6 +31,10 @@ public class Line implements Scalable, Rotatable {
         points[1] = pointB;
     }
 
+    private Line(Point... points){
+        this.points = points;
+    }
+
     // private methods
 
     /**
@@ -42,7 +47,8 @@ public class Line implements Scalable, Rotatable {
         List<Point> pointList = new LinkedList<>();
         int deltaX = point1.X - point0.X;
         int deltaY = point1.Y - point0.Y;
-        int increment = 1, x = point0.X, err;
+        int increment = 1;
+        int x = point0.X, err;
         if (deltaX < 0){
             increment = -1;
             deltaX = -deltaX;
@@ -70,7 +76,8 @@ public class Line implements Scalable, Rotatable {
         List<Point> pointList = new LinkedList<>();
         int deltaX = point1.X - point0.X;
         int deltaY = point1.Y - point0.Y;
-        int increment = 1, y = point0.Y, err;
+        int increment = 1;
+        int y = point0.Y, err;
         if (deltaY < 0){
             increment = -1;
             deltaY = -deltaY;
@@ -117,10 +124,11 @@ public class Line implements Scalable, Rotatable {
      */
     @Override
     public Line translate(int xAmount, int yAmount) {
+        Point[] newPoints = new Point[3];
         Arrays.stream(points)
                 .map(point ->  point = point.translate(xAmount, yAmount))
-                .collect(Collectors.toList()).toArray(points);
-        return this;
+                .collect(Collectors.toList()).toArray(newPoints);
+        return new Line(newPoints);
     }
 
     // methods from Scalable
