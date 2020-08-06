@@ -26,6 +26,10 @@ public interface Plotable {
      */
     Plotable translate (int xAmount, int yAmount);
 
+    default Plotable translate (int amount){
+        return translate(amount, amount);
+    }
+
     /**
      * change the X position of this component.
      * The use of this method may be different to

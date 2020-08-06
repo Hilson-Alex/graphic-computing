@@ -29,6 +29,10 @@ public class Triangle implements Geometric2D, Rotatable {
         points[2] = point2;
     }
 
+    private Triangle(Point... points){
+        this.points = points.clone();
+    }
+
     @Override
     public Collection<Point> getPoints() {
         HashSet<Point> pointSet = new HashSet<>();
@@ -49,30 +53,33 @@ public class Triangle implements Geometric2D, Rotatable {
      */
     @Override
     public Triangle translate(int xAmount, int yAmount) {
-        Arrays.stream(points)
+        Point[] newPoints = new Point[3];
+        Arrays.stream(this.points)
                 .map(point ->  point = point.translate(xAmount, yAmount))
-                .collect(Collectors.toList()).toArray(points);
-        return this;
+                .collect(Collectors.toList()).toArray(newPoints);
+        return new Triangle(newPoints);
     }
 
     @Override
-    public Plotable resize(double xScale, double yScale) {
+    public Triangle resize(double xScale, double yScale) {
+        Point[] newPoints = new Point[3];
         Arrays.stream(points)
                 .map(point ->  point = new Point((int) Math.round(point.X * xScale), (int) Math.round(point.Y * yScale)))
-                .collect(Collectors.toList()).toArray(points);
-        return this;
+                .collect(Collectors.toList()).toArray(newPoints);
+        return new Triangle(newPoints);
     }
 
     @Override
-    public Plotable rotate(double degrees) {
+    public Triangle rotate(double degrees) {
         Point centroid = getCentroid();
+        Point[] newPoints = new Point[3];
         Arrays.stream(points)
                 .map(point -> {
                     point = point.translate(-centroid.X, -centroid.Y);
                     point = Point.rotateByOrigin(point, degrees);
                     return point.translate(centroid.X, centroid.Y);
-                }).collect(Collectors.toList()).toArray(points);
-        return this;
+                }).collect(Collectors.toList()).toArray(newPoints);
+        return new Triangle(newPoints);
     }
 
     @Override
