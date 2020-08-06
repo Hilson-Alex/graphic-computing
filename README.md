@@ -9,6 +9,7 @@ You may want to download the jar [here](/out/artifacts/draw_jar/draw.jar) to use
 ## Usage
 
 There are not too many components already done, but the enphasis in this project are the interfaces.
+For Examples you can run the [Main](/src/com/project/software/documents/Main.java) class, wich run the Demo project.
 
 ---
 
